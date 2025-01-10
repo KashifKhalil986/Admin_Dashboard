@@ -1,8 +1,8 @@
-import React from 'react'
+// import React from 'react'
 
 const LeftSideBar = () => {
   return (
-    <div className='flex flex-col  h-screen bg-[#F0FFF8]  md:w-[25%] lg:w-[20%] border border-gray-300 '>
+    <div className='flex flex-col  h-screen bg-[#F0FFF8] w-full sm:w-full md:w-[25%] lg:w-[20%] border border-gray-300 '>
         <div className='logo flex ms-5 mt-5  '>
             <img className='w-[70px] sm:w-[70px] md:w-[80px] lg:w-[80px]' src="../../../public/images/Logo.svg" alt=""  />
 
@@ -38,7 +38,7 @@ const LeftSideBar = () => {
             
 
         </div>
-        <div className='below space-x-2 flex items-center  justify-center p-2 ms-5 mt-10 bg-[#219b53] w-[180px] sm:w-[180px] md:w-[180px] lg:w-[190px]  whitespace-nowrap rounded'>
+        <div className='below space-x-2 flex items-center  justify-center p-2 mt-10 bg-[#219b53] w-[180px] sm:w-[180px] md:w-[180px] lg:w-[190px]  whitespace-nowrap rounded'>
             <div className='image h-[30px] w-[30px] '>
                 <img className='rounded-full object-cover h-full w-full' src="../../../public/images/kashif_pic.jpg" alt="" />
             </div>

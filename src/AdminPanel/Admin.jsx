@@ -1,4 +1,4 @@
-import React from 'react'
+// import React from 'react'
 import LeftSideBar from './LeftSideBar/LeftSideBar'
 import Navbar from './Navbar/Navbar'
 import Hero from './HeroSection/Hero'
@@ -6,7 +6,7 @@ import Hero from './HeroSection/Hero'
 
 const Admin = () => {
   return (
-    <div className='flex '>
+    <div className='flex  flex-col md:flex-row'>
       <LeftSideBar/>
       <div>
         <div className='nav '>

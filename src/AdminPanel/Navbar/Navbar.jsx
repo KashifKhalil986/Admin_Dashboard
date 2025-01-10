@@ -1,7 +1,7 @@
-import React from 'react';
-import pak from '../../../public/flag/Pakistan.png';
-import usa from '../../../public/flag/usa.webp';
-import spain from '../../../public/flag/spain.png';
+// import React from 'react';
+// import pak from '../../../public/flag/Pakistan.png';
+// import usa from '../../../public/flag/usa.webp';
+// import spain from '../../../public/flag/spain.png';
 
 const Navbar = () => {
     return (
@@ -34,24 +34,24 @@ const Navbar = () => {
                     </button>
 
                     <label htmlFor="language-select" className="sr-only">Select Language</label>
-                    <div className="inline-flex items-center bg-[#F0FFF8] border border-gray-300 rounded px-4 py-2  hover:bg-gray-100">
-                        <select
-                            id="language-select"
-                            className="appearance-none  bg-transparent border-none outline-none cursor-pointer"
-                        >
-                            <option value="pakistan" selected>
+<div className="inline-flex items-center bg-[#F0FFF8] border border-gray-300 rounded   hover:bg-gray-100">
+  <select
+    id="language-select"
+    className="appearance-none bg-transparent border-none outline-none p-3 cursor-pointer"
+  >
+    <option value="pakistan" >
+      Pakistan
+    </option>
+    <option value="usa" >
+      USA
+    </option>
+    <option value="spain">
+      Spanish
+    </option>
+  </select>
+  <i className="fas fa-chevron-down pr-3"></i>
+</div>
 
-                                Pakistan
-                            </option>
-                            <option value="usa">
-                                USA
-                            </option>
-                            <option value="spain">
-                                Spanish
-                            </option>
-                        </select>
-                        <i className="fas fa-chevron-down ml-2"></i>
-                    </div>
 
 
 {/* 
@@ -59,23 +59,21 @@ const Navbar = () => {
                         <i className="fas fa-sign-out-alt px-2"></i>
                         LogOut
                     </button> */}
-                <label htmlFor="profile-logout" className='sr-only'>
-                
-                <img src="../../../public/images/Logo.svg" alt="" />
-                </label>
-                   <div className='inline-flex items-center bg-[#F0FFF8] border border-gray-300 rounded px-4 py-2  hover:bg-gray-100'>
-                   <select id="selection" className="appearance-none  bg-transparent border-none outline-none cursor-pointer">
-                       <option value="profile">
-                        Profile
-                       </option>
-                       <option value="logout">
-                       <i className="fas fa-sign-out-alt px-2"></i>
-                        Logout
-
-                       </option>
-
-                    </select>
-                   </div>
+<div className="inline-flex items-center bg-[#F0FFF8] border border-gray-300 rounded   hover:bg-gray-100">
+  <select
+    id="language-select"
+    className="appearance-none bg-transparent border-none outline-none p-3 cursor-pointer"
+  >
+    <option  value="profile" >
+      Profile
+    </option>
+    <option  value="usa" >
+     Logout
+    </option>
+   
+  </select>
+  <i className="fas fa-chevron-down pr-3"></i>
+</div>
              
                 
                      
