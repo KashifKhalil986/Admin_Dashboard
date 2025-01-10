@@ -3,10 +3,10 @@
 const LeftSideBar = () => {
   return (
     <div className='flex flex-col  h-screen bg-[#F0FFF8] w-full sm:w-full md:w-[25%] lg:w-[20%] border border-gray-300 '>
-        <div className='logo flex ms-5 mt-5  '>
+        {/* <div className='logo flex ms-5 mt-5  '>
             <img className='w-[70px] sm:w-[70px] md:w-[80px] lg:w-[80px]' src="../../../public/images/Logo.svg" alt=""  />
 
-        </div>
+        </div> */}
 
         <div className='middle  ms-5 mt-5 '>
         <div className='menu flex flex-col '>

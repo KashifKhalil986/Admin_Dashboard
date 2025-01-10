@@ -6,24 +6,32 @@ import Hero from './HeroSection/Hero'
 
 const Admin = () => {
   return (
-    <div className='flex  flex-col md:flex-row'>
+    <>
+     <Navbar/>
+     <div className='flex '>
       <LeftSideBar/>
-      <div>
-        <div className='nav '>
-            <Navbar/>
-        </div>
-        <div>
-            <div className='main'>
-              <Hero/>
+      <Hero/>
+     </div>
+    
+    </>
+    // <div className='flex  flex-col md:flex-row'>
+    //   <LeftSideBar/>
+    //   <div>
+    //     <div className='nav '>
+    //         <Navbar/>
+    //     </div>
+    //     <div>
+    //         <div className='main'>
+    //           <Hero/>
                
-            </div>
-            <div className='right'>
+    //         </div>
+    //         <div className='right'>
                
-            </div>
-        </div>
+    //         </div>
+    //     </div>
    
-      </div>
-    </div>
+    //   </div>
+    // </div>
   )
 }
 

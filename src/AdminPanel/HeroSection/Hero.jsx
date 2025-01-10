@@ -64,14 +64,14 @@ const Hero = () => {
 
     
   return (
-           <div className="main flex flex-row gap-8">
+           <div className="main flex flex-row gap-8 ">
 
 
             {/* middle section (cards and graphs) */}
                 <div className='middle flex flex-col ms-5 w-[800px]'>
    
    {/* cards */}
-   <div className="cards flex flex-wrap w-[800px] gap-[35px] ps-5">
+   <div className="cards flex flex-wrap w-[800px] gap-[45px] ps-5">
         {Data.map((element)=>(
                 <div className="w-[15%] " key={element.id}>
                 <Card
