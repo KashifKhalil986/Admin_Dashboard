@@ -8,7 +8,7 @@ const Admin = () => {
   return (
     <>
      <Navbar/>
-     <div className='flex '>
+     <div className='flex flex-col lg:flex-row'>
       <LeftSideBar/>
       <Hero/>
      </div>
