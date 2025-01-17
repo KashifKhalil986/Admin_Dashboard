@@ -38,9 +38,10 @@ const SalesGraph = () => {
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false, 
     plugins: {
       legend: {
-        display: true,
+        display: false,
         position: "top",
       },
       tooltip: {
@@ -50,13 +51,13 @@ const SalesGraph = () => {
     scales: {
       x: {
         title: {
-          display: true,
+          display: false,
           text: "Months",
         },
       },
       y: {
         title: {
-          display: true,
+          display: false,
           text: "Sales in K ($)",
         },
         ticks: {

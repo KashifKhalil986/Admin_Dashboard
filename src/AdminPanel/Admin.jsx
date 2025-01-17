@@ -8,30 +8,14 @@ const Admin = () => {
   return (
     <>
      <Navbar/>
-     <div className='flex flex-col lg:flex-row'>
+     <div className='flex flex-col lg:flex-row '>
       <LeftSideBar/>
       <Hero/>
      </div>
+     
     
     </>
-    // <div className='flex  flex-col md:flex-row'>
-    //   <LeftSideBar/>
-    //   <div>
-    //     <div className='nav '>
-    //         <Navbar/>
-    //     </div>
-    //     <div>
-    //         <div className='main'>
-    //           <Hero/>
-               
-    //         </div>
-    //         <div className='right'>
-               
-    //         </div>
-    //     </div>
-   
-    //   </div>
-    // </div>
+
   )
 }
 

@@ -64,14 +64,14 @@ const Hero = () => {
 
 
     return (
-        <div className="main flex flex-row gap-5 ">
+        <div className="main mx-2 lg:w-full flex justify-between flex-col lg:flex-row px-2 ">
 
 
             {/* middle section (cards and graphs) */}
-            <div className='middle flex flex-col w-full lg:w-[750px] mt-2'>
+            <div className='middle flex flex-col w-full lg:w-[800px] mt-2 lg:ms-10'>
 
                 {/* cards */}
-                <div className="cards flex justify-start px-8 md:w-[800px] flex-wrap md:gap-10 gap-2">
+                <div className="cards flex justify-start mx-2 flex-wrap gap-1 md:gap-10 lg:gap-8 ">
                     {Data.map((element) => (
                         <div className="w-[48%] md:w-[15%]" key={element.id}>
                             <Card
@@ -90,53 +90,60 @@ const Hero = () => {
 
 
                 </div>
-                <div className="graph">
+
+                <div className="graph mt-3 h-[200px] sm:h-[200px] md:h-[300px] lg:h-[400px] lg:w-[735px]">
                     <SalesGraph />
                 </div>
             </div>
-            <div className="right  bg-[#F0FFF8] flex flex-col w-[220px]">
+                           
+                
+            <div className="rightSidebar min-h-screen mt-2  bg-[#F0FFF8] flex flex-col  w-full md:w-full lg:w-[240px] gap-4  p-4">
 
-                <div className="top bg-orange-400 rounded-lg p-5 text-white">
+                <div className="top bg-orange-400 rounded-lg w-full p-5 text-white">
                     <div className="balance">
-                        <h3 className='font-bold text-2xl'>$ 44.40</h3>
-                        <p>Active balance</p>
+                        <h3 className="font-bold text-2xl">$ 44.40</h3>
+                        <p className="text-sm">Active balance</p>
                     </div>
-                    <div className="b-details">
+                    <div className="b-details mt-3">
                         {balanceDetails.map((el) => (
-                            <div className='flex flex-row mt-2 pt-2 items-center ' key={el.id}>
-                                <div className={`${el.icon} ${el.iconColor} bg-white rounded p-1 text-[10px]`}></div>
-                                <div className='ps-2'>{el.decs}</div>
-                                <div className='ml-auto'>{el.price}</div>
-                             
+                            <div className="flex items-center mt-2 pt-2" key={el.id}>
+                                <div
+                                    className={`${el.icon} ${el.iconColor} bg-white rounded p-2 text-xs flex items-center justify-center`}
+                                ></div>
+                                <div className="ps-2 text-sm">{el.decs}</div>
+                                <div className="ml-auto text-sm font-medium">{el.price}</div>
                             </div>
                         ))}
                     </div>
-
-                    <button type="button" className="mt-5 bg-white text-gray-800 hover:bg-gray-200 border border-gray-300 rounded px-4 py-2">
+                    <button
+                        type="button"
+                        className="mt-5 bg-white text-gray-800 hover:bg-gray-200 border border-gray-300 rounded px-4 py-2  text-sm"
+                    >
                         Add Vertical Card
                     </button>
                 </div>
 
-                <div className="bottam rounded-lg p-5 text-black bg-white mt-5 border-2">
-                    <div className="balance">
-                        <h3 className=' text-lg '>Upcomming Payment</h3>
 
+                <div className="bottam rounded-lg p-5 text-black w-full bg-white border-2">
+                    <div className="balance">
+                        <h3 className="text-lg font-medium">Upcoming Payment</h3>
                     </div>
-                    <div className="b-details">
+                    <div className="b-details mt-3">
                         {upcommingBalance.map((el) => (
-                            <div className='flex flex-row mt-2 pt-2 items-center ' key={el.id}>
-                                <div className={`${el.icon} ${el.iconColor} bg-white rounded  text-[10px]`}></div>
-                                <div className='ps-2 text-sm'>{el.decs}</div>
-                                <div className='ml-auto text-xs text-red-700 bg-red-300 rounded'>{el.price}</div>
-                             
+                            <div className="flex items-center mt-2 pt-2" key={el.id}>
+                                <div
+                                    className={`${el.icon} ${el.iconColor} bg-white rounded p-2 text-xs flex items-center justify-center`}
+                                ></div>
+                                <div className="ps-2 text-sm">{el.decs}</div>
+                                <div className="ml-auto text-xs text-red-700 bg-red-300 rounded px-2 py-1">
+                                    {el.price}
+                                </div>
                             </div>
                         ))}
                     </div>
-
-
                 </div>
-
             </div>
+
         </div>
     )
 }

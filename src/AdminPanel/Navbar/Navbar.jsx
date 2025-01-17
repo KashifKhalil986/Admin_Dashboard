@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,7 +26,9 @@ const Navbar = () => {
     
    <div className="logo ms-10 lg:ms-0">
    
-          <img className='w-[50px] sm:w-[60px] md:w-[70px] lg:w-[80px]' src="../../../public/images/Logo.svg" alt="" />
+         <Link to='/'>
+         <img className='w-[70px] sm:w-[70px] md:w-[80px] lg:w-[90px]' src="../../../public/images/Logo.svg" alt="" />
+         </Link>
 
         </div>
   
@@ -44,12 +47,12 @@ const Navbar = () => {
 
 
 
-   <div className="hidden lg:block w-[55%]  max-width-[600px]">
-   <div className="relative">
+   <div className="hidden lg:block w-[56%]  max-width-[600px]">
+   <div className="relative ">
           <input
             type="text"
             placeholder="Search..."
-            className="w-full ms-11 pl-5 py-2 rounded-md bg-[#F0FFF8] border border-gray-300 focus:outline-none focus:ring focus:ring-[#219b53]"
+            className="w-full ms-9 pl-5 py-2 rounded-md bg-[#F0FFF8] border border-gray-300 focus:outline-none focus:ring focus:ring-[#219b53]"
           />
           <div className="absolute inset-y-0 right-0 flex items-center text-gray-400">
                 <i className="fas fa-search"></i>
@@ -60,7 +63,7 @@ const Navbar = () => {
       
    </div>
 {/* icons */}
-        <div className="hidden lg:flex items-center space-x-4 mr-5">
+        <div className="hidden lg:flex items-center  space-x-4 mr-7">
         
          <button className="w-8 h-8 flex justify-center items-center bg-[#F0FFF8] border border-gray-300 rounded">
             <i className="fas fa-moon text-xl"></i>
@@ -123,7 +126,9 @@ const Navbar = () => {
 
             {isOpen && (
               <ul className="absolute mt-1 ml-[-25px] bg-[#F0FFF8] border border-gray-300 rounded shadow-lg">
+                <Link to="/Profile">
                 <li className="px-2 py-1 hover:bg-gray-100 cursor-pointer">Profiles</li>
+                </Link>
                 <li className="px-2 py-1 hover:bg-gray-100 cursor-pointer flex items-center">
                   <i className="fas fa-sign-out-alt "></i>
                   Logout

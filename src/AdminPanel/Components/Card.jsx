@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 const Card = (props) => {
     const {icon,iconBgColor,title,description,price}=props;
     return (
-            <div className="flex flex-wrap flex-col items-center p-3 ]  bg-[#F0FFF8]  rounded-lg shadow-md overflow-hidden  border border-gray-300">
+            <div className="flex flex-wrap flex-col items-center p-3   bg-[#F0FFF8]  rounded-lg shadow-md overflow-hidden  border border-gray-300">
                 <i className={`fas ${icon} rounded-full border-[4px] p-2 border-white text-3xl ${iconBgColor} text-white`}></i>
                 <div className="p-2 flex flex-col  space-y-0">
                     <h5 className="text-gray-800 text-center">
