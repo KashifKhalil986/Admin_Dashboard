@@ -2,29 +2,64 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../../Navbar/Navbar";
 import LeftSideBar from "../../LeftSideBar/LeftSideBar";
+import { useSelector } from 'react-redux';
+
 
 const UserRoleRegistrationForm = () => {
+  const currentTheme = useSelector((state=>state.theme.theme))
+
   const [permissions, setPermissions] = useState({
-    productManager: {},
-    stockManager: {},
-    customerManager: {},
-    warehouseManager: {},
-    repairManager: {},
-    tagManager: {},
+    productManager: { all: false, add: false, read: false, edit: false, delete: false },
+    stockManager: { all: false, add: false, read: false, edit: false, delete: false },
+    customerManager: { all: false, add: false, read: false, edit: false, delete: false },
+    warehouseManager: { all: false, add: false, read: false, edit: false, delete: false },
+    repairManager: { all: false, add: false, read: false, edit: false, delete: false },
+    tagManager: { all: false, add: false, read: false, edit: false, delete: false },
   });
+  const [role, setRole] = useState("");
+
+  const handleRoleChange = (e) => {
+    const selectedRole = e.target.value;
+    setRole(selectedRole);
+
+    // setPermissions((prevPermissions) => {
+    //   const newPermissions = Object.keys(prevPermissions).reduce((acc, key) => {
+    //     if (key === selectedRole) {
+    //       acc[key] = { all: true, add: true, read: true, edit: true, delete: true };
+    //     } else {
+    //       acc[key] = { all: false, add: false, read: false, edit: false, delete: false };
+    //     }
+    //     return acc;
+    //   }, {});
+    //   return { ...newPermissions };
+    // });
+  };
 
   const handlePermissionChange = (manager, permission) => {
-    setPermissions((prevPermissions) => ({
-      ...prevPermissions,
-      [manager]: {
-        ...prevPermissions[manager],
+    setPermissions((prevPermissions) => {
+      const updatedManagerPermissions = {
+        ...prevPermissions[manager], 
         [permission]: !prevPermissions[manager][permission],
-      },
-    }));
+      };
+
+      if ((permission === "edit" || permission === "delete") && updatedManagerPermissions[permission]) {
+        updatedManagerPermissions.read = true; 
+      }
+
+      const allPermissions = ["add", "read", "edit", "delete"];
+      const allEnabled = allPermissions.every((perm) => updatedManagerPermissions[perm]);
+      updatedManagerPermissions.all = allEnabled;
+
+      return {
+        ...prevPermissions,
+        [manager]: updatedManagerPermissions,
+      };
+    });
   };
 
   const handleAllPermissions = (manager) => {
     const allSelected = permissions[manager]?.all;
+
     setPermissions((prevPermissions) => ({
       ...prevPermissions,
       [manager]: {
@@ -39,7 +74,11 @@ const UserRoleRegistrationForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Submitted Permissions:", permissions);
+    const output = {
+      parentPermission: role,
+      permissions: permissions,
+    };
+    console.log("Submitted Permissions:", output);
     alert("Permissions updated successfully!");
   };
 
@@ -66,16 +105,32 @@ const UserRoleRegistrationForm = () => {
       <Navbar />
       <div className="flex flex-col lg:flex-row">
         <LeftSideBar />
-        <div className="flex flex-col items-center lg:ml-10 w-full lg:w-[1000px] bg-[#F0FFF8]">
+        <div className="flex flex-col items-center lg:ml-10 w-full lg:w-[1000px]">
           <form
             onSubmit={handleSubmit}
-            className="bg-white mt-5 shadow-lg rounded-lg p-6 w-full lg:w-[800px]"
+            className={`${currentTheme=== 'dark' ?'bg-[#404040]':'bg-white'}  mt-5 shadow-lg rounded-lg p-6 w-full lg:w-[800px]  border border-gray-300`}
           >
-            <h2 className="text-2xl font-bold mb-6 text-center text-gray-700">
-              User Permissions
-            </h2>
+            <div className="flex justify-between flex-wrap">
+              <h2 className="text-2xl font-bold mb-6 text-gray-700 w-full lg:w-auto">
+                User Permissions
+              </h2>
+              <div className="text-xl mb-6 w-full lg:w-auto">
+                <label htmlFor="role" className="text-lg font-medium text-gray-600">
+                  Role:
+                </label>
+                <input
+                  name="role"
+                  type="text"
+                  id="role"
+                  value={role}
+                  onChange={handleRoleChange}
+                  placeholder="Enter role"
+                  className="bg-[#F0FFF8] border border-gray-300 focus:outline-none focus:ring focus:ring-[#219b53] mx-2 px-2 py-1 rounded-md w-full sm:w-auto"
+                />
+              </div>
+            </div>
 
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-2">
               {roles.map((role) => (
                 <div
                   key={role}
@@ -139,14 +194,14 @@ const UserRoleRegistrationForm = () => {
               <Link to="/user-role">
                 <button
                   type="button"
-                  className="px-4 py-2 rounded bg-gray-700 text-white border"
+                  className="px-4 py-2 rounded bg-[#F0FFF8] border border-gray-300"
                 >
                   Back
                 </button>
               </Link>
               <button
                 type="submit"
-                className="px-4 py-2 rounded bg-green-700 text-white border"
+                className="px-4 py-2 rounded bg-[#F0FFF8] border border-gray-300"
               >
                 Submit
               </button>

@@ -1,22 +1,20 @@
-import { Link } from "react-router-dom";
-import LeftSideBar from "../../LeftSideBar/LeftSideBar";
-import Navbar from "../../Navbar/Navbar";
-import ReportData from "../../../../public/reports.json";
+import LeftSideBar from "../../LeftSideBar/LeftSideBar"
+import Navbar from "../../Navbar/Navbar"
+import { useSelector } from 'react-redux';
+import DeleverData from "../../../../public/Delever.json"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash  } from '@fortawesome/free-solid-svg-icons';
 import DeleteModal from '../../Components/DeleteModal';
-import { useState } from "react"; 
-import { useSelector } from 'react-redux';
+import { useState } from "react";
 
 
-const Reports = () => {
-    const currentTheme = useSelector((state=>state.theme.theme))
+const Delever = () => {
     const [isDeleteModalOpen,setIsDeleteModalOpen]= useState(false);
+    const currentTheme = useSelector((state=>state.theme.theme))
 
     const isopendeletemodal = ()=>{
         setIsDeleteModalOpen(true);
     }
-
   return (
     <div>
       
@@ -24,9 +22,9 @@ const Reports = () => {
     <Navbar/>
     <div className='flex flex-col lg:flex-row '>
         <LeftSideBar/>
-        <div className='flex flex-col  lg:ml-10 w-full lg:w-[1000px] gap-3'>
+        <div className='flex flex-col  lg:ml-10 w-full lg:w-[1000px] gap-3 '>
         <div className="para ">
-                        <p className={`underline text-xl ${currentTheme=== 'dark' ?'text-white':'text-black'}`}>Reports</p>
+                        <p className={`underline text-xl ${currentTheme=== 'dark' ?'text-white':'text-black'}`}>Delever Orders Details</p>
                     </div>
                     <div className="info flex flex-col lg:flex-row justify-between  items-center gap-2">
                         <div className='flex flex-col lg:flex-row gap-2 items-center w-full lg:w-[auto]'>
@@ -47,45 +45,36 @@ const Reports = () => {
                             <span >Entries :</span>
                             <input
                                 type="text"
-                                placeholder="Search by Status"
+                                placeholder="Search by customer name"
                                     className={`rounded-md px-4 py-1 ${currentTheme=== 'dark' ?'bg-[#404040]':'bg-[#F0FFF8]'} border border-gray-300 focus:outline-none focus:ring focus:ring-[#219b53]`}
                             />
                              </div>
                         </div>
-                        <div className='flex gap-2'>
-                        <Link to="/admin">
-                            <button className= {`px-4 py-2 ${currentTheme=== 'dark' ?'bg-[#404040]':'bg-[#F0FFF8]'} ${currentTheme=== 'dark' ?'text-white':'text-black'}  rounded  border`}>
-                                Back
-                            </button>
-                           </Link>
-
-                           <Link to="/report-registration-form">
-                            <button className= {`px-4 py-2 ${currentTheme=== 'dark' ?'bg-[#404040]':'bg-[#F0FFF8]'} ${currentTheme=== 'dark' ?'text-white':'text-black'}  rounded  border`}>
-                                Add Report
-                            </button>
-                           </Link>
-                        </div>
+                        
                     </div>
                     <div className="table-container overflow-x-auto">
 
-                    <table className="border-collapse border border-gray-300 w-full  table-auto">
+                    <table className="border-collapse border border-gray-300 w-full table-auto">
 
                     <thead>
                         <tr>
-                            {ReportData.headers.map((item, index) => (
+                            {DeleverData.headers.map((item, index) => (
                                  <th key={index} className={`${currentTheme=== 'dark' ?'bg-[#404040]':'bg-[#F0FFF8]'}  ${currentTheme=== 'dark' ?'text-white':'text-black'} border-b px-4 py-2`}>{item}</th>
                             ))}
                         </tr>
                     </thead>
 
                     <tbody>
-                        {ReportData.data.map((item) => (
+                        {DeleverData.data.map((item) => (
                             <tr key={item.sNo} className={`hover:bg-gray-100 ${currentTheme === 'dark' ? 'hover:bg-[#404052]' : ''  }`}>
                                 <td className={`px-4 py-2 ${currentTheme=== 'dark' ?'text-white':'text-black'} text-center`}>{item.serial_no}</td>
-                                <td className={`px-4 py-2 ${currentTheme=== 'dark' ?'text-white':'text-black'} text-center`}>{item.report_title}</td>
-                                <td className={`px-4 py-2 ${currentTheme=== 'dark' ?'text-white':'text-black'} text-center`}>{item.date_generated}</td>
-                                <td className={`px-4 py-2 ${currentTheme=== 'dark' ?'text-white':'text-black'} text-center`}>{item.generated_by}</td>
-                                <td className={`px-4 py-2 ${currentTheme=== 'dark' ?'text-white':'text-black'} text-center`}>{item.status}</td>
+                                <td className={`px-4 py-2 ${currentTheme=== 'dark' ?'text-white':'text-black'} text-center`}>{item.customer_name}</td>
+                                <td className={`px-4 py-2 ${currentTheme=== 'dark' ?'text-white':'text-black'} text-center`}>{item.product_name}</td>
+                                <td className={`px-4 py-2 ${currentTheme=== 'dark' ?'text-white':'text-black'} text-center`}>{item.quantity}</td>
+                                <td className={`px-4 py-2 ${currentTheme=== 'dark' ?'text-white':'text-black'} text-center`}>{item.delivery_date}</td>
+                                <td className={`px-4 py-2 ${currentTheme=== 'dark' ?'text-white':'text-black'} text-center`}>{item.delivery_status}</td>
+                                <td className={`px-4 py-2 ${currentTheme=== 'dark' ?'text-white':'text-black'} text-center`}>{item.total_price}</td>
+                            
                                 <td className={`px-4 py-2 ${currentTheme=== 'dark' ?'text-white':'text-black'} text-center`}>
                                 <FontAwesomeIcon icon={faEdit} className='text-green-500 mr-2 cursor-pointer'></FontAwesomeIcon>
                                 <FontAwesomeIcon icon={faTrash} className='text-red-500 cursor-pointer'onClick={()=>isopendeletemodal()}></FontAwesomeIcon>
@@ -112,15 +101,15 @@ const Reports = () => {
              
             </div>
         </div>
+
         <DeleteModal
     isOpen={isDeleteModalOpen}
     onClose={() => setIsDeleteModalOpen(false)}
     />
-
     </div>
 
     </div>
   )
 }
 
-export default Reports
+export default Delever
