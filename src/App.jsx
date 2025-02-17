@@ -80,6 +80,7 @@ function App() {
         <Route path="/registered-user" element={<RegisteredUser/>}/>
         <Route path="/registered-online-order" element={<RegisteredOnlineOrder/>}/>
         <Route path="/registered-byHand-order" element={<RegisteredByHandOrder/>}/> 
+        <Route path="/companies-data" element={<CompaniesData/>}/>  
         <Route path="/companies-data" element={<CompaniesData/>}/> 
         <Route path="/delivered-data" element={<DeliveredData/>}/> 
 
