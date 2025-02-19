@@ -8,12 +8,16 @@ import LeftSideBar from '../../LeftSideBar/LeftSideBar';
 import DeleteModal from '../../Components/DeleteModal';
 import { useState , useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+// import { baseUri } from '../../Components/api/baseUri';
+// import { Permission_Middle_Point } from '../../Components/api/middlePoints';
+// import fetchData from '../../Components/api/axios';
+// import { setLoading } from '../../../AdminPanel/Slice/LoadingSlice'
+import GenericTable from '../../Components/Table/GenericTable';
+import { getPermissions } from '../../Slice/PermissionSlice';
 import { baseUri } from '../../Components/api/baseUri';
 import { Permission_Middle_Point } from '../../Components/api/middlePoints';
 import fetchData from '../../Components/api/axios';
-import { setLoading } from '../../../AdminPanel/Slice/LoadingSlice'
-import GenericTable from '../../Components/Table/GenericTable';
-
+import { toast } from 'react-toastify';
 
 const Userrole = () => {
     let navigate = useNavigate()
@@ -21,14 +25,14 @@ const Userrole = () => {
     const currentTheme = useSelector((state=>state.theme.theme))
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [initialCount, setInitialCount] = useState(0);
-
-
+    const {permissions} = useSelector(state => state.permission) ;
+    const [id , setId] = useState(null)
     // const isopendeletemodal = () => {
     //     setIsDeleteModalOpen(true);
     // }
 
     const [userPermission, setUserPermission] = useState({
-        headers: ["sno", "userName", "parentPermission",'permissions'],
+        headers: ["sno", "userName", "parentPermission",'permissions','Actions'],
         headers2:[],
         headers3:['read' , 'edit' , 'update' , 'delete'],
         data: [],
@@ -36,40 +40,40 @@ const Userrole = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [showRows, setRowsToShow] = useState(5);
     const { companyId} = useSelector((state) => state.selectedCompany );
-
-    const fetchUsers = async () => {
-        try {
-            const url = baseUri + Permission_Middle_Point;
-            const method = "GET";
-            const response = await fetchData(url, method);
-            let arr = response.permission?.flatMap(el => Object.keys(el.permissions || {})) || [];
-            let uniqueArr = [...new Set(arr)];
-            console.log(uniqueArr)
-            
-            dispatch(setLoading());
-            if(companyId){
-               let  filterdData =  response.permission.filter(item => companyId  === item.companyId?._id);
-               if(filterData.length > 0){
+    const processPermissions = () => {
+        if (!permissions) return; 
+    
+        let arr = permissions?.flatMap(el => Object.keys(el.permissions || {})) || [];
+        let uniqueArr = [...new Set(arr)];
+    
+        console.log("Extracted Permissions:", uniqueArr); 
+    
+        if (companyId) {
+            let filteredData = permissions.filter(item => companyId === item.companyId?._id);
+            if (filteredData.length > 0) {
                 setUserPermission((prevState) => ({
                     ...prevState,
-                    headers2: uniqueArr,
-                    data: filterdData,
-                }))
-               }
-            }else{
-                setUserPermission((prevState) => ({
-                    ...prevState,
-                    headers2:uniqueArr,
-                    data: response.permission,
+                    headers2: uniqueArr, 
+                    data: filteredData, 
                 }));
             }
-        } catch (error) {
-            console.log(error);
+        } else {
+            setUserPermission((prevState) => ({
+                ...prevState,
+                headers2: uniqueArr, 
+                data: permissions, 
+            }));
         }
     };
+    
     useEffect(() => {
-        fetchUsers();
+        dispatch(getPermissions())
+        // fetchUsers();
     }, []); 
+
+    useEffect(() => {
+        processPermissions();
+    }, [permissions, companyId]);
 
     const handleSearchQuery = (e) => {
         setSearchQuery(e.target.value.toLowerCase());
@@ -79,26 +83,37 @@ const Userrole = () => {
         setRowsToShow(selectedValue);
         setInitialCount(0); 
     };
-    console.log(userPermission.data)
     const filterData = userPermission?.data.filter((user) => 
             searchQuery>1?
             user.username?.toLowerCase().includes(searchQuery)
             : user
     );
-    console.log(filterData)
     const displayData = filterData.slice(initialCount, initialCount + showRows);
     const handleEdit = (item) => {
         routerSystemSettingDetail("edit", item);
     };
 
-    const handleDelete = () => {
+    const handleDelete = (item) => {
+        setIsDeleteModalOpen(true);
+        setId(item._id)
         setIsDeleteModalOpen(true);
     };
-    const routerSystemSettingDetail = (state, user) => {
-        const path = `/user-registration-form`;
-        const data = { state, user };
+    const routerSystemSettingDetail = (state, role) => {
+        const path = `/user-role-registration-form`;
+        const data = { state, role };
         navigate(path, { state: data });
     };
+    const handleConfirmDelete = async()=>{
+        const URL = baseUri + Permission_Middle_Point +"/"+ id;
+        const method = 'Delete';
+        const response = fetchData(URL , method );
+        setIsDeleteModalOpen(false)
+        toast.success(response.data.message)
+        setUserPermission((prevState) => ({
+            ...prevState, 
+            data: prevState.data .filter(el => el._id !== id)
+        }));
+     }
 
 
     return (
@@ -186,6 +201,7 @@ const Userrole = () => {
                 </div>
                 <DeleteModal
                     isOpen={isDeleteModalOpen}
+                    confirmDelete = {handleConfirmDelete}
                     onClose={() => setIsDeleteModalOpen(false)}
                 />
 

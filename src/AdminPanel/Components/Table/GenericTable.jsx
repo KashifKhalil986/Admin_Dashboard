@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 const GenericTable = ({ headers, headers2,headers3, data, currentTheme, onEdit, onDelete }) => {
 
   return (
-    <table className="border-collapse border border-gray-300 w-full overflow-x-auto">
+    <table className="border-collapse border border-gray-300 w-full overflow-x-auto whitespace-nowrap">
       <thead>
         {/* top Header */}
       <tr>
@@ -244,8 +244,8 @@ const GenericTable = ({ headers, headers2,headers3, data, currentTheme, onEdit, 
 };
 GenericTable.propTypes = {
   headers: PropTypes.arrayOf(PropTypes.string).isRequired,
-  headers2: PropTypes.arrayOf(PropTypes.string).isRequired,
-  headers3: PropTypes.arrayOf(PropTypes.string).isRequired,
+  headers2: PropTypes.arrayOf(PropTypes.string),
+  headers3: PropTypes.arrayOf(PropTypes.string),
   data: PropTypes.arrayOf(PropTypes.object),
   currentTheme: PropTypes.oneOf(['light', 'dark']).isRequired,
   onEdit: PropTypes.func.isRequired,

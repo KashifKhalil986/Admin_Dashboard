@@ -12,19 +12,20 @@ import fetchData from "../../Components/api/axios";
 
 const Product = () => {
     const dispatch = useDispatch();
-    const navigate =useNavigate();
-    const {companyId} = useSelector((state) => state.selectedCompany);
+    const navigate = useNavigate();
+    const { companyId } = useSelector((state) => state.selectedCompany);
 
 
     const [productData, setProductData] = useState({
-        headers: ['SNo', 'createdAt', 'productCategory', 'productDescription', 'productImageUrl', 'productName', 'productPrice', 'productQuantity', 'updatedAt', 'userName','Actions'],
+        headers: ['SNo', 'createdAt', 'productCategory', 'productDescription', 'productImageUrl', 'productName', 'productPrice', 'productQuantity', 'updatedAt', 'userName', 'Actions'],
         data: []
     });
 
     const [showRows, setRowsToShow] = useState(5);
+    const [initialCount , setInitialCount]  = useState(0)
     const [searchQuery , setSearchQuery] = useState('');
 
-    const handleSearchQuery = (e) =>{
+    const handleSearchQuery = (e) => {
         setSearchQuery(e.target.value.toLowerCase());
     }
 
@@ -38,22 +39,22 @@ const Product = () => {
         try {
             const Url = baseUri + Product_Middle_Point;
             const method = "GET";
-            const response = await fetchData(Url, method);
+            const {data} = await fetchData(Url, method);
             dispatch(setLoading());
-            console.log(response)
+            console.log(data)
             if(companyId){
-                let  filterdData =  response.filter(item => companyId  === item.userId?.companyId?._id);
-                setProductData((prevState) => ({
-                 ...prevState,
-                 data: filterdData,
-             }))
-             }else{
+                let  filterdData =  data.filter(item => companyId  === item.userId?.companyId?._id);
                 setProductData((prevState) => ({
                     ...prevState,
-                    data: response
+                    data: filterdData,
+                }))
+            } else {
+                setProductData((prevState) => ({
+                    ...prevState,
+                    data: data
     
                 }))
-             }
+            }
 
         }
         catch (error) {
@@ -70,32 +71,43 @@ const Product = () => {
 
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const currentTheme = useSelector((state => state.theme.theme))
-    
+
     const handleEdit = (item) => {
-        routerSystemSettingDetail("edit",item)
+        routerSystemSettingDetail("edit", item)
     };
-    const routerSystemSettingDetail = (state ,product)=>{
-        const path =`/product-registration-form`;
-        const data ={state ,product}
-        navigate(path ,{state:data})
-     
+    const routerSystemSettingDetail = (state, product) => {
+        const path = `/product-registration-form`;
+        const data = { state, product }
+        navigate(path, { state: data })
+
     }
 
     const handleDelete = () => {
         setIsDeleteModalOpen(true);
-    
+
     };
- 
-    const filterData = productData.data.filter((product) =>{
-        return(
+
+    const filterData = productData.data.filter((product) => {
+        return (
             product.productName.toLowerCase().includes(searchQuery) ||
             product.productCategory.toLowerCase().includes(searchQuery) ||
-            product.role.toLowerCase().includes(searchQuery) 
+            product.role.toLowerCase().includes(searchQuery)
 
         )
     })
 
-    const displayData = filterData.slice(0, showRows)
+    const showNext = () =>{
+        if(initialCount + showRows <= filterData.length)
+            setInitialCount(initialCount + showRows)
+    }
+    
+     const showPrevious = () =>{
+    if(initialCount - showRows >= 0)
+        setInitialCount(initialCount -showRows)
+     }
+
+    const displayData = filterData.slice(initialCount, initialCount+showRows)
+    console.log(displayData)
     return (
         <div>
 
@@ -132,11 +144,11 @@ const Product = () => {
 
                                 <span >Entries :</span>
                                 <input
-                                type="text"
-                                placeholder="Search by ProductName,category and role"
-                                className={`rounded-md px-4 py-1 ${currentTheme === 'dark' ? 'bg-[#404040]' : 'bg-[#F0FFF8]'} border border-gray-300 focus:outline-none focus:ring focus:ring-[#219b53]`}
-                                value={searchQuery}
-                                onChange={handleSearchQuery}
+                                    type="text"
+                                    placeholder="Search by ProductName,category and role"
+                                    className={`rounded-md px-4 py-1 ${currentTheme === 'dark' ? 'bg-[#404040]' : 'bg-[#F0FFF8]'} border border-gray-300 focus:outline-none focus:ring focus:ring-[#219b53]`}
+                                    value={searchQuery}
+                                    onChange={handleSearchQuery}
                                 />
                             </div>
                         </div>
@@ -154,7 +166,7 @@ const Product = () => {
                             </Link>
                         </div>
                     </div>
-                  
+
                     <div className="table-container overflow-x-auto">
 
                         <GenericTable
@@ -169,13 +181,13 @@ const Product = () => {
                     <div className="pages flex justify-center gap-1 mt-4">
 
 
-                        <button className={`px-4 py-2 ${currentTheme === 'dark' ? 'bg-[#404040]' : 'bg-[#F0FFF8]'} ${currentTheme === 'dark' ? 'text-white' : 'text-black'}  rounded  border`}>
+                        <button onClick={showPrevious} className={`px-4 py-2 ${currentTheme === 'dark' ? 'bg-[#404040]' : 'bg-[#F0FFF8]'} ${currentTheme === 'dark' ? 'text-white' : 'text-black'}  rounded  border`}>
                             Previous
                         </button>
                         <button className={`px-4 py-2 ${currentTheme === 'dark' ? 'bg-[#404040]' : 'bg-[#F0FFF8]'} ${currentTheme === 'dark' ? 'text-white' : 'text-black'}  rounded  border`}>
-                            1 of 1
+                        {Math.ceil((initialCount + showRows)/ (showRows))} of {Math.ceil((filterData.length)/showRows)}
                         </button>
-                        <button className={`px-4 py-2 ${currentTheme === 'dark' ? 'bg-[#404040]' : 'bg-[#F0FFF8]'} ${currentTheme === 'dark' ? 'text-white' : 'text-black'}  rounded  border`}>
+                        <button onClick={showNext} className={`px-4 py-2 ${currentTheme === 'dark' ? 'bg-[#404040]' : 'bg-[#F0FFF8]'} ${currentTheme === 'dark' ? 'text-white' : 'text-black'}  rounded  border`}>
                             Next
                         </button>
 
