@@ -4,9 +4,9 @@
             "p": "Welcome to Delly"
         },
         "middle": {
-            "emailLable": "Email Address",
+            "emailLabel": "Email Address",
             "emailPlaceholder": "Enter your email",
-            "passwordLable": "Password",
+            "passwordLabel": "Password",
             "passwordPlaceholder": "Enter your password",
             "signIn": "Sign In"
         },

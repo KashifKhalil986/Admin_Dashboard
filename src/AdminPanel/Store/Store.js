@@ -23,7 +23,7 @@ const Store = configureStore({
     tags:tagsReducer,
     warehouse:warehouseReducer,
     deliver :deliverReducer,
-    companies:companyReducer,
+    companies:companyReducer, 
     chatbot:chatbotReducer,
     selectedCompany:selectedCompanySlice,
     permission:permissionSlice,

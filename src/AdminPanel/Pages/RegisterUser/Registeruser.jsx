@@ -15,7 +15,7 @@ import { toast } from 'react-toastify';
 
 
 
-const Registeruser = () => {
+const RegisterUser = () => {
     
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -43,17 +43,17 @@ const Registeruser = () => {
             console.log(response)
             console.log(userId)
             if(companyId){
-               let  filterdData =  response.data.users.filter(item => companyId  === item.companyId?._id);
+               let  filterData =  response.data.users.filter(item => companyId  === item.companyId?._id);
                setUserData((prevState) => ({
                 ...prevState,
-                data: filterdData,
+                data: filterData,
             }))
             }
             else if (userId){
-                let  filterdData =  response.data.users.filter(item => userId  === item.companyId?._id);
+                let  filterData =  response.data.users.filter(item => userId  === item.companyId?._id);
                 setUserData((prevState) => ({
                  ...prevState,
-                 data: filterdData,
+                 data: filterData,
                 }))
             }
             else{
@@ -70,7 +70,7 @@ const Registeruser = () => {
 
     useEffect(() => {
         fetchUsers();
-    }, []);
+    },[]);
 
     const handleSearchQuery = (e) => {
         setSearchQuery(e.target.value.toLowerCase());
@@ -236,7 +236,7 @@ const Registeruser = () => {
     );
 };
 
-export default Registeruser;
+export default RegisterUser;
 
 
 
