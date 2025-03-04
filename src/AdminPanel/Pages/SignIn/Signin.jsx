@@ -107,7 +107,7 @@ const SignIn = () => {
                     htmlFor="email"
                     className="block text-sm font-medium "
                   >
-                    {t('signInPage.middle.emailLabel')}
+                    {t('signInPage.middle.emailLable')}
                   </label>
                   <input
                     type="email"
@@ -126,7 +126,7 @@ const SignIn = () => {
                     htmlFor="password"
                     className="block text-sm font-medium "
                   >
-                    {t('signInPage.middle.passwordLabel')}
+                    {t('signInPage.middle.passwordLable')}
                   </label>
                   <input
                     type={showPassword ? "text" : "password"}

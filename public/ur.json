@@ -4,9 +4,9 @@
             "p": "ڈیلے میں خوش آمدید"
         },
         "middle": {
-            "emailLabel": "ای میل پتہ",
+            "emailLable": "ای میل پتہ",
             "emailPlaceholder": "اپنی ای میل درج کریں",
-            "passwordLabel": "پاس ورڈ",
+            "passwordLable": "پاس ورڈ",
             "passwordPlaceholder": "اپنا پاس ورڈ درج کریں",
             "signIn": "لاگ ان کریں"
         },
