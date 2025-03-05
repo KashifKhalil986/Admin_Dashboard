@@ -1,10 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LeftSideBar from "../../LeftSideBar/LeftSideBar";
 import Navbar from "../../Navbar/Navbar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUsers } from "../../Slice/UsersSlice";
+import { fetchCompanies } from "../../Slice/CompanySlice";
 
 const SendNotification = () => {
+  const dispatch = useDispatch();
   const currentTheme = useSelector((state) => state.theme.theme);
+  const { data: userData } = useSelector((state) => state.users)
+  const {data : companyData} = useSelector((state)=>state.companies)
 
   const [allUserAndCompany, setAllUserAndCompany] = useState(false);
   const [selectUserAndCompany, setSelectedUserAndCompany] = useState(false);
@@ -14,9 +19,15 @@ const SendNotification = () => {
     body: "",
   });
 
-  const [selectedForm ,setSelectedForm] = useState({
-userType :true
+  const [selectedForm, setSelectedForm] = useState({
+    userType: "users",
+    selectedUser: ""
   })
+
+  useEffect(() => {
+    dispatch(fetchUsers())
+    dispatch(fetchCompanies())
+  }, [dispatch])
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,10 +40,10 @@ userType :true
       [name]: value,
     });
   }
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Data Submitted:", formData);
+    console.log("Form Data Submitted:", formData, "Selected User : ", selectedForm.selectedUser);
   };
 
   return (
@@ -46,12 +57,12 @@ userType :true
               Show Notification
             </p>
           </div>
-          <div className="flex w-[380px] mx-auto">
-            <div className="w-full">
-              <ul className="flex flex-col gap-3">
-                <li>
+          <div className="flex w-full ">
+            <div className="flex w-full">
+              <ul className="flex w-full justify-evenly">
+                <li className="w-1/2 mr-2">
                   <div
-                    className={`w-full flex justify-between ${currentTheme === "dark" ? "text-white" : "text-black"} border-2 items-center gap-3 p-2 cursor-pointer`}
+                    className={`w-full flex justify-center rounded-lg ${currentTheme === "dark" ? "text-white" : "text-black"} border-2 items-center gap-3 p-2 cursor-pointer`}
                     onClick={() => setAllUserAndCompany(!allUserAndCompany)}>
                     <p>All registered users and companies</p>
 
@@ -63,7 +74,7 @@ userType :true
                     </span>
                   </div>
                   {allUserAndCompany &&
-                    <div className={`w-full ${currentTheme === "dark" ? "bg-[#404040] text-white" : "bg-white"} border p-6 shadow-lg rounded-lg `}>
+                    <div className={`w-full mt-5 ${currentTheme === "dark" ? "bg-[#404040] text-white" : "bg-white"} border p-6 shadow-lg rounded-lg `}>
                       <h2 className="font-bold text-center">All Users & Companies</h2>
                       <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
@@ -74,7 +85,7 @@ userType :true
                             value={formData.title}
                             onChange={handleChange}
                             placeholder="Enter title"
-                            className={`w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#013D29] ${currentTheme === "dark" ? "text-white bg-[#404040]" : "text-black bg:white"}`} 
+                            className={`w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#013D29] ${currentTheme === "dark" ? "text-white bg-[#404040]" : "text-black bg:white"}`}
                             required
                           />
                         </div>
@@ -86,7 +97,7 @@ userType :true
                             value={formData.body}
                             onChange={handleChange}
                             placeholder="Enter body text"
-                            className={`w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#013D29] ${currentTheme === "dark" ? "text-white bg-[#404040]" : "text-black bg:white"}`} 
+                            className={`w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#013D29] ${currentTheme === "dark" ? "text-white bg-[#404040]" : "text-black bg:white"}`}
                             rows="4"
                             required
                           ></input>
@@ -95,18 +106,18 @@ userType :true
                         <button
                           type="submit"
                           className={`w-full px-4 py-2 rounded  ${currentTheme === 'dark' ? 'text-white bg-[#404040]' : 'text-black bg-[#F0FFF8]'} border border-gray-300`}
-                          >
+                        >
                           Send Notification
                         </button>
                       </form>
                     </div>
-                    }
+                  }
                 </li>
 
 
-                <li>
+                <li className="w-1/2 mr-2">
                   <div
-                    className={`w-full flex justify-between ${currentTheme === "dark" ? "text-white" : "text-black"} border-2 items-center gap-3 p-2 cursor-pointer`}
+                    className={`w-full flex justify-center rounded-lg ${currentTheme === "dark" ? "text-white" : "text-black"} border-2 items-center gap-3 p-2 cursor-pointer`}
                     onClick={() => setSelectedUserAndCompany(!selectUserAndCompany)}
                   >
                     <p>Selected registered users and companies</p>
@@ -119,41 +130,117 @@ userType :true
                   </div>
 
                   {selectUserAndCompany && (
-                   <div className={`w-full ${currentTheme === "dark" ? "bg-[#404040] text-white" : "bg-white"} border p-6 shadow-lg rounded-lg `}>
-                   <h2 className="font-bold text-center">Selected Users & Companies</h2>
-                   <div className="w-full flex items-center mt-6 lg:mt-5">
-                   <label className="flex items-center mr-4">
-  <input
-    type="radio"
-    name="userType"
-    value="users"
-    checked={selectedForm.userType === "users"}
-    onChange={handleSelectedFormChange}
-    className="w-4 h-4 text-blue-500 border-gray-300 rounded focus:ring-blue-500"
-  />
-  <span className="ml-2 text-sm font-medium">Users</span>
-</label>
+                    <div className={`w-full mt-5 ${currentTheme === "dark" ? "bg-[#404040] text-white" : "bg-white"} border p-6 shadow-lg rounded-lg `}>
+                      <h2 className="font-bold text-center">
+                        Selected {selectedForm.userType === "users" ? "Users" : "Companies"}
+                      </h2>
 
-<label className="flex items-center">
-  <input
-    type="radio"
-    name="userType"
-    value="companies"
-    checked={selectedForm.userType === "companies"}
-    onChange={handleSelectedFormChange}
-    className="w-4 h-4 text-blue-500 border-gray-300 rounded focus:ring-blue-500"
-  />
-  <span className="ml-2 text-sm font-medium">Companies</span>
-</label>
+                      <div className="w-full flex items-center mt-6 lg:mt-5">
+                        <label className="flex items-center mr-4">
+                          <input
+                            type="radio"
+                            name="userType"
+                            value="users"
+                            checked={selectedForm.userType === "users"}
+                            onChange={handleSelectedFormChange}
+                            className="w-4 h-4 text-blue-500 border-gray-300 rounded focus:ring-blue-500"
+                          />
+                          <span className="ml-2 text-sm font-medium">Users</span>
+                        </label>
+
+                        <label className="flex items-center">
+                          <input
+                            type="radio"
+                            name="userType"
+                            value="companies"
+                            checked={selectedForm.userType === "companies"}
+                            onChange={handleSelectedFormChange}
+                            className="w-4 h-4 text-blue-500 border-gray-300 rounded focus:ring-blue-500"
+                          />
+                          <span className="ml-2 text-sm font-medium">Companies</span>
+                        </label>
+                      </div>
+
+                      <div className="w-full mt-4">
+                        <label className="block text-sm font-medium mb-2">
+                          Selected {selectedForm.userType === "users" ? "Users" : "Companies"}
+                        </label>
+                        {selectedForm.userType === "users" ? (
+                          <select
+                            name="selectedUser"
+                            value={selectedForm.selectedUser}
+                            onChange={handleSelectedFormChange}
+                            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#013D29]"
+                          >
+                            {userData?.map((user) => (
+                              <option key={user._id} value={user._id}>
+                                {user.username}
+                              </option>
+                            ))}
+                          </select>
+                        ) : (
+                          <select
+                            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#013D29]"
+                          >
+                            {companyData?.map((company)=>(
+                              <option key={company._id} value={company._id}>
+                                {company.companyName}
+                                </option>
+                            ))
+                          }
+                          </select>
+                        )}
+                      </div>
+
+                      <div className={`w-full mt-2 ${currentTheme === "dark" ? "bg-[#404040] text-white" : "bg-white"} p-2`}>
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                          <div>
+                            <label className="block font-medium">Title</label>
+                            <input
+                              type="text"
+                              name="title"
+                              value={formData.title}
+                              onChange={handleChange}
+                              placeholder="Enter title"
+                              className={`w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#013D29] ${currentTheme === "dark" ? "text-white bg-[#404040]" : "text-black bg:white"}`}
+                              required
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block font-medium">Body</label>
+                            <input
+                              name="body"
+                              value={formData.body}
+                              onChange={handleChange}
+                              placeholder="Enter body text"
+                              className={`w-full mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#013D29] ${currentTheme === "dark" ? "text-white bg-[#404040]" : "text-black bg:white"}`}
+                              rows="4"
+                              required
+                            ></input>
+                          </div>
+
+                          <button
+                            type="submit"
+                            className={`w-full px-4 py-2 rounded  ${currentTheme === 'dark' ? 'text-white bg-[#404040]' : 'text-black bg-[#F0FFF8]'} border border-gray-300`}
+                          >
+                            Send Notification
+                          </button>
+                        </form>
+                      </div>
                     </div>
-                 </div>
                   )}
+
+
+
+
                 </li>
               </ul>
             </div>
           </div>
         </div>
       </div>
+
     </div>
   );
 };
