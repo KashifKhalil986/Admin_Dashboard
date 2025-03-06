@@ -3,20 +3,25 @@ import LeftSideBar from "../../LeftSideBar/LeftSideBar";
 import Navbar from "../../Navbar/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsers } from "../../Slice/UsersSlice";
-import { fetchCompanies } from "../../Slice/CompanySlice";
+import { fetchCompanies } from "../../Slice/CompanySlice";import { allNotification_Middle_Point, Notification_Middle_Point } from "../../Components/api/middlePoints";
+import { allCompanies_Notification_End_Point, allUsers_Notification_End_Point, Notification_End_Point } from "../../Components/api/endPoint";
+import fetchData from "../../Components/api/axios";
+import { toast } from "react-toastify";
+import { notificationBaseUrl } from "../../Components/api/baseUri";
 
 const SendNotification = () => {
   const dispatch = useDispatch();
   const currentTheme = useSelector((state) => state.theme.theme);
   const { data: userData } = useSelector((state) => state.users)
   const {data : companyData} = useSelector((state)=>state.companies)
-
+  const [targetType,setTargetType]= useState(null);
   const [allUserAndCompany, setAllUserAndCompany] = useState(false);
   const [selectUserAndCompany, setSelectedUserAndCompany] = useState(false);
 
   const [formData, setFormData] = useState({
     title: "",
     body: "",
+    fcmToken:"",
   });
 
   const [selectedForm, setSelectedForm] = useState({
@@ -33,18 +38,67 @@ const SendNotification = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
   const handleSelectedFormChange = (e) => {
     const { name, value } = e.target;
     setSelectedForm({
       ...selectedForm,
       [name]: value,
     });
+    let selectedItem ;
+    if(name==="selectedField"){
+      selectedItem  = selectedForm.userType === "users" ?userData.find((user)=>user.fcmToken===value) :
+      companyData.find((company)=>company.fcmToken===value)
+    }
+    if(selectedItem){
+      setFormData((prev)=>({
+        ...prev,
+        fcmToken :selectedItem.fcmToken,
+      }))
+    }
+
+    
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log("Form Data Submitted:", formData, "Selected User : ", selectedForm.selectedUser);
-  };
+    console.log("Form Data of all user or companies submit:", formData);
+    const url = notificationBaseUrl + allNotification_Middle_Point + (targetType === "Users" ? allUsers_Notification_End_Point : allCompanies_Notification_End_Point);
+    const method ="POST";
+  const response = await fetchData(url,method,formData)
+  console.log(response.status)
+
+  if (response?.status ===200 || response?.status ===201){
+    console.log("Response of all",response)
+    toast.success("Message Send Successfully")
+    
+  }  
+  else{
+    toast.error("Failed to send notification")
+  }
+};
+
+  const handleSingleSubmit =async (e) =>{
+    console.log("Sending Notification:", formData);
+
+    e.preventDefault();
+    const url = notificationBaseUrl + Notification_Middle_Point + Notification_End_Point;
+    const method = "POST";
+    if(!formData.fcmToken){
+      toast.error("Selected a user or company with valid fcmToken")
+    }
+    const response = await fetchData(url,method,formData)
+    if (response?.status === 200 || response?.status === 201) {
+      console.log(response)
+      toast.success("Message Send Successfully")
+    }
+    else{
+    toast.error("Failed to send notification")
+    }
+  }
+
+  const filterUser =userData?.filter(el=> el.fcmToken !== null);
+  const filterCompany = companyData?.filter(el=> el.fcmToken !== null);
 
   return (
     <div>
@@ -103,12 +157,22 @@ const SendNotification = () => {
                           ></input>
                         </div>
 
+                       <div className="flex gap-5 ">
+                       <button
+                          type="submit"
+                          onClick={()=>{setTargetType("Users")}}
+                          className={` px-4 py-2 rounded  ${currentTheme === 'dark' ? 'text-white bg-[#404040]' : 'text-black bg-[#F0FFF8]'} border border-gray-300`}
+                        >
+                           Send to Users
+                        </button>
                         <button
                           type="submit"
-                          className={`w-full px-4 py-2 rounded  ${currentTheme === 'dark' ? 'text-white bg-[#404040]' : 'text-black bg-[#F0FFF8]'} border border-gray-300`}
-                        >
-                          Send Notification
-                        </button>
+                          className={` px-4 py-2 rounded  ${currentTheme === 'dark' ? 'text-white bg-[#404040]' : 'text-black bg-[#F0FFF8]'} border border-gray-300`}
+                          onClick={()=>{setTargetType("Companies")}}
+                       >
+                          Send to Companies
+                          </button>
+                       </div>
                       </form>
                     </div>
                   }
@@ -167,23 +231,26 @@ const SendNotification = () => {
                         </label>
                         {selectedForm.userType === "users" ? (
                           <select
-                            name="selectedUser"
+                            name="selectedField"
                             value={selectedForm.selectedUser}
                             onChange={handleSelectedFormChange}
-                            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#013D29]"
+                            className={`w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#013D29] ${currentTheme === "dark" ? "bg-[#404040] text-white" : "bg-white"}`}
                           >
-                            {userData?.map((user) => (
-                              <option key={user._id} value={user._id}>
+                            {filterUser?.map((user) => (
+                              <option key={user._id} value={user.fcmToken}>
                                 {user.username}
                               </option>
                             ))}
                           </select>
                         ) : (
                           <select
-                            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#013D29]"
+                            className={`w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#013D29] ${currentTheme === "dark" ? "bg-[#404040] text-white" : "bg-white"}`}
+                            name="selectedField"
+                            value={selectedForm.selectedCompany}
+                            onChange={handleSelectedFormChange}
                           >
-                            {companyData?.map((company)=>(
-                              <option key={company._id} value={company._id}>
+                            {filterCompany?.map((company)=>(
+                              <option key={company._id} value={company.fcmToken}>
                                 {company.companyName}
                                 </option>
                             ))
@@ -193,7 +260,7 @@ const SendNotification = () => {
                       </div>
 
                       <div className={`w-full mt-2 ${currentTheme === "dark" ? "bg-[#404040] text-white" : "bg-white"} p-2`}>
-                        <form onSubmit={handleSubmit} className="space-y-4">
+                        <form onSubmit={handleSingleSubmit} className="space-y-4">
                           <div>
                             <label className="block font-medium">Title</label>
                             <input

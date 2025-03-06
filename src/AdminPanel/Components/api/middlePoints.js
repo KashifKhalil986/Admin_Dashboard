@@ -9,3 +9,6 @@ export const Warehouse_Middle_Point ="/api/warehouse";
 export const Deliver_Middle_Point ="/api/orders";
 export const Companies_Middle_Point ="/api/companies";
 export const Permission_Middle_Point = "/api/permission"
+export const Notification_Middle_Point ="/v1/api/notification"
+export const allNotification_Middle_Point ="/v1/api/notification"
+
